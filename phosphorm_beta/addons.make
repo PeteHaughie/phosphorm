@@ -1,3 +1,0 @@
-ofxMidi
-ofxOMXCamera
-
