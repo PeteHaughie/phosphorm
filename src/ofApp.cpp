@@ -257,9 +257,9 @@ void ofApp::setup()
     /* audiobiz */
 
     int bufferSize = 512;
-    sampleRate = 48000;
+    // sampleRate = 48000;
 
-    // sampleRate = 44100;
+    sampleRate = 44100;
 
     // audio
     phase_l1 = 0;
@@ -323,7 +323,7 @@ void ofApp::setup()
 
     soundStream.printDeviceList();
 
-    // soundStream.setDeviceID(0); // is this really needed?
+    soundStream.setDeviceID(audioID);
 
     ofSoundStreamSettings settings;
 
@@ -381,6 +381,22 @@ void ofApp::update()
         midiIn.openPort(midiID);
         ofLog() << "midiID: " << midiID;
         prevMidiID = midiID;
+    }
+
+    if (audioID != prevAudioID)
+    {
+        soundStream.close();
+        int bufferSize = 512;
+        ofSoundStreamSettings settings;
+        soundStream.setDeviceID(audioID);
+        settings.setOutListener(this);
+        settings.sampleRate = sampleRate;
+        settings.numOutputChannels = 2;
+        settings.numInputChannels = 0;
+        settings.bufferSize = bufferSize;
+        soundStream.setup(settings);
+        ofLog() << "audioID: " << audioID;
+        prevAudioID = audioID;
     }
 
     midibiz();
@@ -1143,6 +1159,34 @@ void ofApp::keyPressed(int key)
             else
             {
                 midiID = 0;
+            }
+        }
+    }
+    if (key == '0')
+    {
+        auto soundDevices = soundStream.getDeviceList();
+        vector<string> devices;
+        for (const auto& device : soundDevices) {
+            devices.push_back(device.name);
+        }
+        if (devices.empty())
+        {
+            cout << "no audio devices found" << endl;
+            return;
+        }
+        else
+        {
+            for (unsigned long int i = 0; i < devices.size(); i++)
+            {
+                cout << devices[i] << endl;
+            }
+            if (audioID > 0)
+            {
+                audioID--;
+            }
+            else
+            {
+                audioID = devices.size();
             }
         }
     }

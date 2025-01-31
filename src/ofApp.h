@@ -113,4 +113,5 @@ public:
     ofShader shader_phosphor;
 
     unsigned int long midiID = 0, prevMidiID = 0;
+    unsigned int long audioID = 0, prevAudioID = 0;
 };
