@@ -229,7 +229,7 @@ int p_lock_increment = 0;
 void ofApp::setup()
 {
     ofSetFrameRate(30);
-    // ofSetVerticalSync(true);
+    ofSetVerticalSync(true);
     ofBackground(0);
     ofHideCursor();
     // ofSetLogLevel(OF_LOG_VERBOSE);
@@ -240,7 +240,7 @@ void ofApp::setup()
     midiIn.listInPorts();
 
     // open port by number (you may need to change this)
-    // midiIn.openPort(1);
+    midiIn.openPort(midiID);
     // midiIn.openPort("IAC Pure Data In");	// by name
     // midiIn.openVirtualPort("ofxMidiIn Input"); // open a virtual port
 
@@ -257,9 +257,9 @@ void ofApp::setup()
     /* audiobiz */
 
     int bufferSize = 512;
-    // sampleRate 			= 48000;
+    sampleRate = 48000;
 
-    sampleRate = 44100;
+    // sampleRate = 44100;
 
     // audio
     phase_l1 = 0;
@@ -323,7 +323,7 @@ void ofApp::setup()
 
     soundStream.printDeviceList();
 
-    soundStream.setDeviceID(0);
+    // soundStream.setDeviceID(0); // is this really needed?
 
     ofSoundStreamSettings settings;
 
@@ -377,6 +377,15 @@ void ofApp::setup()
 //--------------------------------------------------------------
 void ofApp::update()
 {
+
+    if (midiID != prevMidiID)
+    {
+        midiIn.closePort();
+        midiIn.openPort(midiID);
+        ofLog() << "midiID: " << midiID;
+        prevMidiID = midiID;
+    }
+
     midibiz();
 
     for (int i = 0; i < p_lock_number; i++)
@@ -1114,6 +1123,31 @@ void ofApp::keyPressed(int key)
     if (key == '6')
     {
         overflow_switch = 5;
+    }
+    if (key == '9')
+    {
+        vector<string> devices;
+        devices = midiIn.getInPortList();
+        if (devices.empty())
+        {
+            cout << "no midi devices found" << endl;
+            return;
+        }
+        else
+        {
+            for (int i = 0; i < devices.size(); i++)
+            {
+                cout << devices[i] << endl;
+            }
+            if (midiID < devices.size())
+            {
+                midiID++;
+            }
+            else
+            {
+                midiID = 0;
+            }
+        }
     }
 
     /*

@@ -17,6 +17,7 @@ class ofApp : public ofBaseApp, public ofxMidiListener
 {
 
 public:
+    ~ofApp() noexcept override = default;
     void setup();
     void update();
     void draw();
@@ -110,4 +111,6 @@ public:
     ofFbo fb1;
 
     ofShader shader_phosphor;
+
+    unsigned int long midiID = 0, prevMidiID = 0;
 };
