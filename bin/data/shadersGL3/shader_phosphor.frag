@@ -9,7 +9,7 @@ uniform float test;
 out vec4 fragColor; // Explicit output variable
 
 void main() {
-  vec2 uv = gl_FragCoord.xy / resolution;
+  vec2 uv = gl_FragCoord.xy / resolution.xy;
   float x = 0.0016;
   float y = 0.0022;
 

@@ -1135,7 +1135,7 @@ void ofApp::keyPressed(int key)
         }
         else
         {
-            for (int i = 0; i < devices.size(); i++)
+            for (unsigned long int i = 0; i < devices.size(); i++)
             {
                 cout << devices[i] << endl;
             }
