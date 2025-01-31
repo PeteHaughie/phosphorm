@@ -13,7 +13,7 @@
 
 int main()
 {
-#ifdef TARGET_OPENGLES
+#ifdef __linux__
 	ofGLESWindowSettings settings;
 	settings.glesVersion=2;
 #else

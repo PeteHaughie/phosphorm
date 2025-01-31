@@ -334,14 +334,11 @@ void ofApp::setup()
     settings.bufferSize = bufferSize;
     soundStream.setup(settings);
 
-    if (ofIsGLProgrammableRenderer())
-    {
-        shader_phosphor.load("shadersGL3/shader_phosphor");
-    }
-    else
-    {
+#ifdef __linux__
         shader_phosphor.load("shadersES2/shader_phosphor");
-    }
+#else
+        shader_phosphor.load("shadersGL3/shader_phosphor");
+#endif
 
     fb0.allocate(ofGetWidth(), ofGetHeight());
     fb0.begin();
