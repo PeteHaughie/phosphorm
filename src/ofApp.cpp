@@ -230,7 +230,7 @@ void ofApp::setup()
 {
     ofSetFrameRate(30);
     ofSetVerticalSync(true);
-    ofBackground(0);
+    ofBackground(ofColor::black);
     ofHideCursor();
     // ofSetLogLevel(OF_LOG_VERBOSE);
     ofDisableArbTex();
@@ -340,12 +340,12 @@ void ofApp::setup()
         shader_phosphor.load("shadersGL3/shader_phosphor");
 #endif
 
-    fb0.allocate(ofGetWidth(), ofGetHeight());
+    fb0.allocate(ofGetWidth(), ofGetWidth());
     fb0.begin();
     ofClear(0, 0, 0, 255);
     fb0.end();
 
-    fb1.allocate(ofGetWidth(), ofGetHeight());
+    fb1.allocate(ofGetWidth(), ofGetWidth());
     fb1.begin();
     ofClear(0, 0, 0, 255);
     fb1.end();
@@ -416,7 +416,7 @@ void ofApp::update()
 void ofApp::draw()
 {
 
-    ofBackground(0);
+    ofBackground(ofColor::black);
 
     /* midimessagesbiz */
 
@@ -426,7 +426,7 @@ void ofApp::draw()
 
     shader_phosphor.begin();
     // shader_phosphor.setUniform1f("test", sx);
-    shader_phosphor.setUniform2f("resolution", ofGetWidth(), ofGetHeight());
+    shader_phosphor.setUniform2f("resolution", ofGetWidth(), ofGetWidth());
     fb1.draw(0, 0);
     shader_phosphor.end();
 
@@ -445,7 +445,7 @@ void ofApp::draw()
     {
 
         float x = scaleshape * (lAudio[i] * 180.0f) + ofGetWidth() / 2.0;
-        float y = scaleshape * (rAudio[i] * 180.0f) + ofGetHeight() / 2.0;
+        float y = scaleshape * (rAudio[i] * 180.0f) + ofGetWidth() / 2.0;
 
         ofCurveVertex(x, y);
 
@@ -454,7 +454,7 @@ void ofApp::draw()
 
     fb0.end();
 
-    fb0.draw(0, 0);
+    fb0.draw(ofGetWidth(), ofGetHeight() - ofGetWidth(), -ofGetWidth(), ofGetWidth());
 
     fb1.begin();
     fb0.draw(0, 0);
