@@ -334,11 +334,11 @@ void ofApp::setup()
     settings.bufferSize = bufferSize;
     soundStream.setup(settings);
 
-#ifdef __linux__
-        shader_phosphor.load("shadersES2/shader_phosphor");
-#else
-        shader_phosphor.load("shadersGL3/shader_phosphor");
-#endif
+// #ifdef __linux__
+    shader_phosphor.load("shadersES2/shader_phosphor");
+// #else
+//         shader_phosphor.load("shadersGL3/shader_phosphor");
+// #endif
 
     fb0.allocate(ofGetWidth(), ofGetHeight());
     fb0.begin();
@@ -369,20 +369,32 @@ void ofApp::setup()
         p_lock[0][i] = .5;
         p_lock[1][i] = .5;
     }
+
+    // NDI
+    senderName = "Phosphorm";
+	ofSetWindowTitle(senderName); // show it on the title bar
+	senderWidth  = ofGetWidth();
+	senderHeight = ofGetHeight();
+    m_fbo.allocate(senderWidth, senderHeight, GL_RGBA);
+    ndiSender.SetReadback(true);
+    ndiSender.SetFrameRate(ofGetFrameRate());
+    bInitialized = ndiSender.CreateSender(senderName.c_str(), senderWidth, senderHeight);
+    if (!bInitialized) {
+		printf("Could not create [%s]\n", senderName.c_str());
+		senderName += "_2";
+		bInitialized = ndiSender.CreateSender(senderName.c_str(), senderWidth, senderHeight);
+		// If that still fails warn the user and quit
+		if (!bInitialized) {
+            ofLog() << "Could not create NDI sender";
+			exit();
+		}
+	}
+	printf("Created sender   [%s]\n", senderName.c_str());
 }
 
 //--------------------------------------------------------------
 void ofApp::update()
 {
-
-    if (midiID != prevMidiID)
-    {
-        midiIn.closePort();
-        midiIn.openPort(midiID);
-        ofLog() << "midiID: " << midiID;
-        prevMidiID = midiID;
-    }
-
     if (audioID != prevAudioID)
     {
         soundStream.close();
@@ -463,6 +475,12 @@ void ofApp::draw()
     fb0.begin();
     ofClear(0, 0, 0, 255);
     fb0.end();
+
+    // NDI
+    m_fbo.begin();
+    fb1.draw(0, 0);
+    m_fbo.end();
+    ndiSender.SendImage(m_fbo.getTexture());
 
     ofSetColor(ofColor::white);
     ofDrawBitmapString("fps: " + ofToString((int)ofGetFrameRate(), 2) + " fade: " + ofToString(sx, 2), 20, ofGetHeight() - 10);
@@ -992,6 +1010,8 @@ void ofApp::exit()
     // clean up
     midiIn.closePort();
     midiIn.removeListener(this);
+    // NDI
+    ndiSender.ReleaseSender();
 }
 
 //--------------------------------------------------------------

@@ -12,6 +12,7 @@
 
 #include "ofMain.h"
 #include "ofxMidi.h"
+#include "ofxNDI.h" // NDI classes
 
 class ofApp : public ofBaseApp, public ofxMidiListener
 {
@@ -34,7 +35,7 @@ public:
 
     ofxMidiIn midiIn;
     std::vector<ofxMidiMessage> midiMessages;
-    std::size_t maxMessages = 10; //< max number of messages to keep track of
+    std::size_t maxMessages = 8; //< max number of messages to keep track of
 
     void audioOut(ofSoundBuffer &buffer);
 
@@ -114,4 +115,18 @@ public:
 
     unsigned int long midiID = 0, prevMidiID = 0;
     unsigned int long audioID = 0, prevAudioID = 0;
+
+    // NDI
+    ofxNDIsender ndiSender;        // NDI sender
+    std::string senderName;        // Sender name
+    unsigned int senderWidth = 0;  // Width of the sender output
+    unsigned int senderHeight = 0; // Height of the sender output
+    bool bInitialized = false;
+    ofFbo m_fbo;                   // Fbo used for graphics and sending
+    ofImage textureImage;          // Texture image for the 3D cube graphics
+
+    bool bReadback = true;
+    bool bAsync = true;
+    double framerate = 60.0;
+
 };

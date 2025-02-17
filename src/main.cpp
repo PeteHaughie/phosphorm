@@ -13,14 +13,16 @@
 
 int main()
 {
-#ifdef __linux__
+// #ifdef __linux__
 	ofGLESWindowSettings settings;
 	settings.glesVersion=2;
-#else
-	ofGLWindowSettings settings;
-	settings.setGLVersion(3,2);
-#endif
-	settings.setSize(720, 480);
+	// settings.windowMode=OF_GAME_MODE;
+// #else
+// 	ofGLWindowSettings settings;
+// 	settings.setGLVersion(3,2);
+	settings.windowMode=OF_WINDOW;
+// #endif
+	settings.setSize(480, 320);
 	ofCreateWindow(settings);
 	// this kicks off the running of my app
 	// can be OF_WINDOW or OF_FULLSCREEN

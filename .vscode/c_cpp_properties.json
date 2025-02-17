@@ -34,7 +34,9 @@
                 "${workspaceRoot}/../../../libs/uriparser/include",
                 "${workspaceRoot}/../../../libs/utf8/include",
                 "${workspaceRoot}/../../../addons/ofxMidi/src",
-                "${workspaceRoot}/../../../addons/ofxMidi/libs/**"
+                "${workspaceRoot}/../../../addons/ofxMidi/libs/**",
+                "${workspaceRoot}/../../../addons/ofxNDI/src",
+                "${workspaceRoot}/../../../addons/ofxNDI/libs/NDI/include"
             ],
             "browse": {
                 "limitSymbolsToIncludedHeaders": true,
